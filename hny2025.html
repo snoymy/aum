@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #29292e;
+  overflow: hidden; /* Prevent scrolling */
+  position: relative;
+}
+
+.bokeh-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: -1;
+}
+
+.bokeh-bg span {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  filter: blur(20px);
+  animation: blink 4s infinite ease-in-out;
+  animation-delay: calc(-1s * var(--delay));
+  background: rgba(var(--r, 255), var(--g, 255), var(--b, 255), 0.2);
+}
+
+.bokeh-bg span:nth-child(odd) {
+  background: rgba(var(--r, 255), var(--g, 255), var(--b, 255), 0.3);
+}
+
+@keyframes blink {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.3;
+  }
+  50% {
+    transform: scale(1.5);
+    opacity: 0.7;
+  }
+}
+
+.flip-card {
+  background-color: transparent;
+  width: 90vw;
+  height: 90vh;
+  perspective: 1000px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column; /* Stack the button on top of the card */
+}
+
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+
+.flip-card.flipped .flip-card-inner {
+  transform: rotateY(180deg); /* Flip card when class is added */
+}
+
+.flip-card-front, .flip-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.flip-card-front {
+  color: black;
+}
+
+.flip-card-back {
+  color: white;
+  transform: rotateY(180deg);
+}
+
+.flip-card-front img,
+.flip-card-back img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.flip-button {
+  margin-bottom: 10px;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  background-color: #2980b9;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.flip-button:hover {
+  background-color: #1a5c85;
+}
+
+.download-button {
+  margin-bottom: 10px;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+</style>
+</head>
+<body>
+
+<div class="bokeh-bg">
+  <!-- JavaScript will populate more bokeh elements dynamically -->
+</div>
+
+<div class="flip-card">
+  <div class="flip-card-inner">
+    <div class="flip-card-front">
+      <img src="./assets/front.png" alt="Avatar">
+    </div>
+    <div class="flip-card-back">
+      <img src="./assets/back.png" alt="Avatar">
+    </div>
+  </div>
+  <button class="flip-button" onclick="toggleFlip()">Flip card</button>
+  <a class="download-button" href="https://drive.usercontent.google.com/download?id=1qE36CxndhNIEy4FAi6Wn97t_G669dJsJ&export=download&authuser=2&confirm=t&uuid=edf0e8e5-625d-4fc8-9ff0-b95121a4649d&at=APvzH3qbhxoWccy2T_dqQnSBFzEA:1735444298816">Download this card</a>
+</div>
+
+<script>
+function toggleFlip() {
+  const card = document.querySelector('.flip-card');
+  card.classList.toggle('flipped');
+}
+
+// Generate bokeh circles dynamically with random positions and colors
+const bokehContainer = document.querySelector('.bokeh-bg');
+for (let i = 0; i < 50; i++) { // Increase the number of bokeh elements
+  const bokeh = document.createElement('span');
+  const randomX = Math.random() * 100; // Random horizontal position
+  const randomY = Math.random() * 100; // Random vertical position
+  const randomR = Math.floor(Math.random() * 256); // Random red color
+  const randomG = Math.floor(Math.random() * 256); // Random green color
+  const randomB = Math.floor(Math.random() * 256); // Random blue color
+  const randomDelay = Math.random() * 4; // Random animation delay
+  bokeh.style.setProperty('--r', randomR);
+  bokeh.style.setProperty('--g', randomG);
+  bokeh.style.setProperty('--b', randomB);
+  bokeh.style.setProperty('--delay', randomDelay);
+  bokeh.style.left = `${randomX}%`;
+  bokeh.style.top = `${randomY}%`;
+  bokehContainer.appendChild(bokeh);
+}
+</script>
+
+</body>
+</html>
+
