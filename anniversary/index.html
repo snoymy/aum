@@ -173,14 +173,14 @@
 
       // Function to create floating hearts from bottom
       function createHeart() {
-        const heart = document.createElement("div");
+        const heart = document.createElement("img");
         heart.classList.add("heart");
-        heart.innerHTML = "❤️";
+        heart.src = "./assets/heart.png"
         document.getElementById("floating-hearts").appendChild(heart);
 
         // Randomize position, size, and speed
         const size = Math.random() * 30 + 10; // Random size between 10px and 25px
-        heart.style.fontSize = `${size}px`;
+        heart.style.height = `${size}px`;
         heart.style.left = `${Math.random() * 100}vw`;
         heart.style.animationDuration = `${Math.random() * 10 + 3}s`; // Random duration between 2-5s
 
