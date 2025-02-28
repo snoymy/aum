@@ -1,0 +1,198 @@
+<!doctype html>
+<html>
+  <head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <link href="./style.css" rel="stylesheet">
+    <style>
+      /* Dimmed overlay */
+      #dim-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5); /* Adjust darkness */
+        pointer-events: none;
+        z-index: 1;
+      }
+
+      /* Downlight effect */
+      #downlight {
+        position: fixed;
+        top: 20%;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        -webkit-mask-image: linear-gradient(transparent, black);
+        mask-image: linear-gradient(transparent, black);
+        pointer-events: none;
+        z-index: 2;
+      }
+
+      /* Floating hearts container */
+      #floating-hearts {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        overflow: hidden;
+        z-index: 0;
+      }
+
+      /* Heart style */
+      .heart {
+        position: absolute;
+        bottom: 0;  /* Start from bottom */
+        color: #ff4d6d;
+        font-size: 24px;
+        opacity: 1;
+        animation: floatUp 5s linear forwards;
+      }
+
+      /* Heart floating animation */
+      @keyframes floatUp {
+        0% {
+          transform: translateY(0) scale(1);
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(-100vh) scale(0.5);
+          opacity: 0;
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-[#672335]">  
+    <!-- Downlight effect -->
+    <div id="downlight">
+      <!-- Dim overlay -->
+      <div id="dim-overlay"></div>
+    </div>
+
+    <!-- Floating hearts container -->
+    <div id="floating-hearts"></div>
+
+    <div class="flex flex-col justify-center items-center min-h-screen max-h-screen w-full">
+      <div class="relative w-[360px] sm:w-[600px] md:w-[760px] lg:w-[1080px]">
+        <img class="drop-shadow-xl" src="./assets/frame.png" alt="logo"/>
+          <div class="absolute inset-0 flex mt-[23%] justify-center h-[5%]">
+          <div class="grid grid-flow-col gap-2 text-center auto-cols-max">
+
+            <div class="counter-frame">
+              <span class="counter-number">
+                <span id="years" class="w-full"></span>
+              </span>
+              years
+            </div>
+
+            <div class="counter-frame">
+              <span class="counter-number">
+                <span id="months" class="w-full"></span>
+              </span>
+              months
+            </div>
+
+            <div class="counter-frame">
+              <span class="counter-number">
+                <span id="days" class="w-full"></span>
+              </span>
+              days 
+            </div>
+
+            <div class="counter-frame">
+              <span class="counter-number">
+                <span id="hours" class="w-full"></span>
+              </span>
+              hours
+            </div>
+
+            <div class="counter-frame">
+              <span class="counter-number">
+                <span id="min" class="w-full"></span>
+              </span>
+              min
+            </div>
+
+            <div class="counter-frame">
+              <span class="counter-number">
+                <span id="sec" class="w-full"></span>
+              </span>
+              sec
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+    
+    <script>
+      const anniversaryDate = new Date("January 11, 2025 03:05:00");
+
+      function calculateDateDiff(startDate, endDate) {
+        const diffMs = Math.abs(endDate - startDate);
+        
+        let remainingMs = diffMs;
+
+        const years = Math.floor(remainingMs / (1000 * 60 * 60 * 24 * 365));
+        remainingMs %= (1000 * 60 * 60 * 24 * 365);
+
+        const months = Math.floor(remainingMs / (1000 * 60 * 60 * 24 * 30));
+        remainingMs %= (1000 * 60 * 60 * 24 * 30);
+
+        const days = Math.floor(remainingMs / (1000 * 60 * 60 * 24));
+        remainingMs %= (1000 * 60 * 60 * 24);
+
+        const hours = Math.floor(remainingMs / (1000 * 60 * 60));
+        remainingMs %= (1000 * 60 * 60);
+
+        const min = Math.floor(remainingMs / (1000 * 60));
+        remainingMs %= (1000 * 60);
+
+        const sec = Math.floor(remainingMs / 1000);
+
+        return { years, months, days, hours, min, sec};
+      }
+
+      function updateCounter() {
+        const date = calculateDateDiff(anniversaryDate, new Date());
+
+        document.getElementById("years").style = `--value:${date.years}`;
+        document.getElementById("months").style = `--value:${date.months}`;
+        document.getElementById("days").style = `--value:${date.days}`;
+        document.getElementById("hours").style = `--value:${date.hours}`;
+        document.getElementById("min").style = `--value:${date.min}`;
+        document.getElementById("sec").style = `--value:${date.sec}`;
+      }
+
+      updateCounter();
+      setInterval(updateCounter, 1000);
+
+      // Function to create floating hearts from bottom
+      function createHeart() {
+        const heart = document.createElement("div");
+        heart.classList.add("heart");
+        heart.innerHTML = "❤️";
+        document.getElementById("floating-hearts").appendChild(heart);
+
+        // Randomize position, size, and speed
+        const size = Math.random() * 30 + 10; // Random size between 10px and 25px
+        heart.style.fontSize = `${size}px`;
+        heart.style.left = `${Math.random() * 100}vw`;
+        heart.style.animationDuration = `${Math.random() * 10 + 3}s`; // Random duration between 2-5s
+
+        // Remove heart after animation
+        setTimeout(() => {
+          heart.remove();
+        }, 5000);
+      }
+
+      // Generate hearts at intervals
+      setInterval(createHeart, 700);
+    </script>
+  </body>
+</html>
+
