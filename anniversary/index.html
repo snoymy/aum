@@ -133,26 +133,34 @@
       const anniversaryDate = new Date("January 11, 2025 03:05:00");
 
       function calculateDateDiff(startDate, endDate) {
-        const diffMs = Math.abs(endDate - startDate);
-        
-        let remainingMs = diffMs;
+        let years = endDate.getFullYear() - startDate.getFullYear();
+        let months = endDate.getMonth() - startDate.getMonth();
+        let days = endDate.getDate() - startDate.getDate();
+        let hours = endDate.getHours() - startDate.getHours();
+        let min = endDate.getMinutes() - startDate.getMinutes();
+        let sec = endDate.getSeconds() - startDate.getSeconds();
 
-        const years = Math.floor(remainingMs / (1000 * 60 * 60 * 24 * 365));
-        remainingMs %= (1000 * 60 * 60 * 24 * 365);
-
-        const months = Math.floor(remainingMs / (1000 * 60 * 60 * 24 * 30));
-        remainingMs %= (1000 * 60 * 60 * 24 * 30);
-
-        const days = Math.floor(remainingMs / (1000 * 60 * 60 * 24));
-        remainingMs %= (1000 * 60 * 60 * 24);
-
-        const hours = Math.floor(remainingMs / (1000 * 60 * 60));
-        remainingMs %= (1000 * 60 * 60);
-
-        const min = Math.floor(remainingMs / (1000 * 60));
-        remainingMs %= (1000 * 60);
-
-        const sec = Math.floor(remainingMs / 1000);
+        if (sec < 0) {
+            min--;
+            sec += 60;
+        }
+        if (min < 0) {
+            hours--;
+            min += 60;
+        }
+        if (hours < 0) {
+            days--;
+            hours += 24;
+        }
+        if (days < 0) {
+            months--;
+            const prevMonth = new Date(endDate.getFullYear(), endDate.getMonth(), 0).getDate();
+            days += prevMonth;
+        }
+        if (months < 0) {
+            years--;
+            months += 12;
+        }
 
         return { years, months, days, hours, min, sec };
       }
