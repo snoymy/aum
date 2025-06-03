@@ -26,6 +26,7 @@
       border-radius: 10px;
       font-size: 15px;
       transition: transform 0.2s; 
+      margin: 3px;
     }
 
     button:hover {
@@ -35,7 +36,15 @@
 
     button:active {
       cursor: pointer;
-      transform: scale(1.1);
+      transform: scale(1);
+      transition: none; 
+    }
+
+    button:disabled {
+      background: #f8f8f8; 
+      cursor: not-allowed;
+      transform: scale(1);
+      transition: none; 
     }
 
     .egg {
@@ -79,12 +88,13 @@
       <div class="message" id="message" x-show="hatch">
         <p x-show="count == 0">เจี๊ยบ~ เจี๊ยบ~ คุณปริ้นขอโทษ ให้อภัยลูกเจี๊ยบตัวนี้ได้มั้ยคับ</p>
         <p x-show="count == 0">ลูกเจี๊ยบตัวนี้ไม่อยากถูกคุณอุ้มโกรธ หายโกรธกันนะ เจี๊ยบ เจี๊ยบ~</p>
-        <p x-show="count > 0">คุณปริ้นไม่อยากโดนทอดอีกแล้ว🥲</p>
-        <p x-show="count > 0">ขอโทษนะครับคุณอุ้ม</p>
-        <p x-show="count > 1">นะๆๆๆ คุณอุ้มสุดที่รักครับ</p>
+        <p x-show="count > 0 && count < 2">คุณปริ้นไม่อยากโดนทอดอีกแล้ว🥲</p>
+        <p x-show="count > 0 && count < 2">ขอโทษนะครับคุณอุ้ม</p>
+        <p x-show="count > 1 && count < 3">ให้อภัยนะะะ คุณอุ้มสุดที่รักครับ</p>
         <div>
           <button @click="forgive=true">ให้อภัย🥹</button>
-          <button @click="forgive=false">จับไปทำนักเก็ต!!!😭</button>
+          <button @click="forgive=false" :disabled="count >= 2" x-show="count < 2"><span x-show="count > 0 && count < 2">ยังไม่ให้อภัย </span><span x-show="count >= 2">ให้อภัยแต่ </span>จับไปทำนักเก็ต!!!😭</button>
+          <button @click="forgive=true" x-show="count >= 2"><span x-show="count >= 2">ให้อภัยแต่ </span>จับไปทำนักเก็ต!!!</button>
         </div>
       </div>
     </center>
@@ -92,7 +102,8 @@
 
   <div x-show="forgive === true">
     <center>
-      <img class="chick" x-show="hatch" src="./chick2.png" alt="chick">
+      <img class="chick" x-show="hatch && count < 2" src="./chick2.png" alt="chick">
+      <img class="chick" x-show="hatch && count >= 2" src="./nugget.png" alt="chick">
       <div class="message" id="message" x-show="hatch">
         <p>เย่~~ หายโกรธกันนะคับ</p>
         <p>รักคุณอุ้มที่สุดเลยย🥰🥰🥰</p>
